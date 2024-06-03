@@ -1,25 +1,25 @@
-import subprocess
-
 from argparse import ArgumentParser
-from typing import NamedTuple
 
+from mrlgrl.project import add_file, clean, create_project, remove_file
 from mrlgrl.quartus import add_path, check_path
-
-
-class ProjectArgs(NamedTuple):
-    name: str = None
-    file: str = None
 
 
 def status(args):
     print('Quartus was ' + ('' if check_path() else 'not ') + 'found.')
 
-    # output = subprocess.run(
-    #         'quartus_sh',
-    #         stdout=subprocess.DEVNULL,
-    #         stderr=subprocess.DEVNULL)
 
-    # p = ProjectArgs(**parser.parse_args().__dict__)
+def project(args):
+    if args.name is not None:
+        create_project(args.name)
+
+    if args.add_file is not None:
+        add_file(args.add_file)
+
+    if args.remove_file is not None:
+        remove_file(args.remove_file)
+
+    if args.clean:
+        clean()
 
 
 def main():
@@ -41,21 +41,35 @@ def main():
             'project',
             help='Project utilities',
             description='Project utilities.')
+    parser_project.set_defaults(func=project)
 
     project_operations = parser_project.add_mutually_exclusive_group(
             required=True)
 
     project_operations.add_argument(
-            '-c',
-            '--create',
+            '-n',
+            '--new',
             dest='name',
-            help='Create a new project')
+            help='Create a new project in current directory')
 
     project_operations.add_argument(
             '-a',
             '--add-file',
-            dest='file',
+            dest='add_file',
             help='Add verilog file to the project')
+
+    project_operations.add_argument(
+            '-r',
+            '--remove-file',
+            dest='remove_file',
+            help='Remove file from the verilog project')
+
+    project_operations.add_argument(
+            '-c',
+            '--clean',
+            dest='clean',
+            help='Clean generated project files',
+            action='store_true')
 
     parser_testbench = subparsers.add_parser(
             'testbench',

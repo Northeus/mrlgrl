@@ -26,15 +26,12 @@ def add_path() -> None:
     intel_dir = find_intel_dir()
 
     if intel_dir is None:
-        print(intel_dir)
-        print(1)
         return
 
     quartus_bin_dir = intel_dir / 'quartus' / 'bin'
     modelsim_bin_dir = intel_dir / 'modelsim_ase' / 'bin'
 
     if not (quartus_bin_dir.is_dir() and modelsim_bin_dir.is_dir()):
-        print(2)
         return
 
     paths = [str(x.absolute()) for x in (quartus_bin_dir, modelsim_bin_dir)]
