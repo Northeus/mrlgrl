@@ -63,11 +63,13 @@ def find_dependencies(testbench_filename: str) -> Optional[list[str]]:
     return list(map(str, module_to_file.values()))
 
 
-def run_gui(name: str) -> None:
-    ...
-
-
-def run_cli(name: str) -> None:
+def modelsim_script(name: str,
+                    *,
+                    vsim: bool = True,
+                    restart: bool = False,
+                    add_waves: bool = False,
+                    show_waves: bool = False
+                    ) -> Optional[str]:
     file = find_module_file(name)
 
     if file is None:
@@ -78,8 +80,39 @@ def run_cli(name: str) -> None:
     if deps is None:
         return
 
-    subprocess.run(['vsim',
-                    '-c',
-                    '-do',
-                    f'vlog {" ".join(deps)} {str(file)}; vsim {name};'
-                    'run -all; quit'])
+    return (f'vlog {" ".join(deps)} {str(file)};'
+            + (f' vsim {name};' if vsim else '')
+            + (' add wave -r ./*;' if add_waves else '')
+            + (' restart -f;' if restart else '')
+            + ' run -all;'
+            + (' view wave;' if show_waves else ''))
+
+
+def run_gui(name: str) -> None:
+    script_sim = modelsim_script(name,
+                                 vsim=True,
+                                 add_waves=True,
+                                 show_waves=True)
+    script_run = modelsim_script(name,
+                                 vsim=False,
+                                 restart=True,
+                                 show_waves=True)
+
+    if script_sim is None or script_run is None:
+        return
+
+    do_file = Path('run.do')
+    do_file.write_text(script_run)
+
+    subprocess.run(['vsim', '-do', script_sim])
+
+    do_file.unlink()
+
+
+def run_cli(name: str) -> None:
+    script = modelsim_script(name)
+
+    if script is None:
+        return
+
+    subprocess.run(['vsim', '-c', '-do', script + '; quit'])

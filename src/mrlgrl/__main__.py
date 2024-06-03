@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 
-from mrlgrl.testbench import list_testbenches, run_cli
+from mrlgrl.testbench import list_testbenches, run_cli, run_gui
 from mrlgrl.project import add_file, clean, create_project, remove_file
 from mrlgrl.quartus import add_path, check_path, flash, synthesize
 
@@ -29,6 +29,9 @@ def testbench(args):
 
     if args.module_cli is not None:
         run_cli(args.module_cli)
+
+    if args.module_gui is not None:
+        run_gui(args.module_gui)
 
 
 def main():
@@ -98,9 +101,15 @@ def main():
 
     testbench_operations.add_argument(
             '-c',
-            '--run-cli',
+            '--cli',
             dest='module_cli',
             help='Run testbench module in CLI')
+
+    testbench_operations.add_argument(
+            '-g',
+            '--gui',
+            dest='module_gui',
+            help='Run testbench module in GUI')
 
     parser_synthesize = subparsers.add_parser(
             'synthesize',
