@@ -13,6 +13,7 @@ For the installation from sources use either `make install-dev` or `make install
 
 ## Usage
 To use the application see `mrlgrl -h` for the help, or `mrlgrl [module] -h`.
+You have to execute every command within the project folder.
 
 The Quartus II binaries are automatically detected, use `mrlgrl status` to see,
 if the Quartus II was found. If the automatic detection failed, you have to
