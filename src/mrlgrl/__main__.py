@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 
+from mrlgrl.testbench import list_testbenches, run_cli
 from mrlgrl.project import add_file, clean, create_project, remove_file
 from mrlgrl.quartus import add_path, check_path, flash, synthesize
 
@@ -20,6 +21,14 @@ def project(args):
 
     if args.clean:
         clean()
+
+
+def testbench(args):
+    if args.list_testbenches:
+        print('\n'.join(list_testbenches()))
+
+    if args.module_cli is not None:
+        run_cli(args.module_cli)
 
 
 def main():
@@ -75,6 +84,23 @@ def main():
             'testbench',
             help='Testbanch utilities',
             description='Testbench utilitires.')
+    parser_testbench.set_defaults(func=testbench)
+
+    testbench_operations = parser_testbench.add_mutually_exclusive_group(
+            required=True)
+
+    testbench_operations.add_argument(
+            '-l',
+            '--list',
+            dest='list_testbenches',
+            help='List found testbenches within the project',
+            action='store_true')
+
+    testbench_operations.add_argument(
+            '-c',
+            '--run-cli',
+            dest='module_cli',
+            help='Run testbench module in CLI')
 
     parser_synthesize = subparsers.add_parser(
             'synthesize',

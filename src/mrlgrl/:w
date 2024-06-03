@@ -1,0 +1,26 @@
+import subprocess
+
+from pathlib import Path
+from typing import Optional
+
+
+def is_testbench(file: Path) -> bool:
+    return file.is_file() and file.read_text().startswith('`timescale')
+
+
+def list_testbenches() -> list[str]:
+    return [x.stem for x in Path().glob('**/*.v') if is_testbench(x)]
+
+
+def find_dependencies(testbench_filename: str) -> Optional[set[str]]:
+    module_file: dict[str, Path] = {}
+
+    ...
+
+
+def run_gui(name: str) -> None:
+    ...
+
+
+def run_cli(name: str) -> None:
+    ...
