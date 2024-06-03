@@ -4,18 +4,26 @@ from pathlib import Path
 from typing import Optional
 
 
-def find_project_file() -> Optional[Path]:
-    files = list(Path().glob('*.qsf'))
+def find_file(suffix: str, message_name: str) -> Optional[Path]:
+    files = list(Path().glob(f'*.{suffix}'))
 
     if len(files) == 0:
-        print('Could not found a project. :(')
+        print(f'Could not found a {message_name} file. :(')
         return
 
     if len(files) > 1:
-        print('Multiple projects were found in this directory :(')
+        print('Multiple {message_name} files were found in this directory. :(')
         return
 
     return files[0]
+
+
+def find_binary_file() -> Optional[Path]:
+    return find_file('sof', 'binary')
+
+
+def find_project_file() -> Optional[Path]:
+    return find_file('qsf', 'project')
 
 
 def load_template(filename: str, project: str = '') -> Optional[str]:
@@ -50,9 +58,7 @@ def create_project(name) -> None:
 
     subprocess.run(['quartus_sh', '-t', 'create_project.tcl'])
 
-    # create_script.unlink()
-
-    print('Done')
+    create_script.unlink()
 
 
 def add_file(name: str) -> None:

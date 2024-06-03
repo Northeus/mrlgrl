@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
 from mrlgrl.project import add_file, clean, create_project, remove_file
-from mrlgrl.quartus import add_path, check_path
+from mrlgrl.quartus import add_path, check_path, flash, synthesize
 
 
 def status(args):
@@ -76,15 +76,17 @@ def main():
             help='Testbanch utilities',
             description='Testbench utilitires.')
 
-    parser_synthetize = subparsers.add_parser(
-            'synthetize',
-            help='Synthetize design',
-            description='Synthetize design.')
+    parser_synthesize = subparsers.add_parser(
+            'synthesize',
+            help='Synthesize design',
+            description='Synthesize the project in the current directory.')
+    parser_synthesize.set_defaults(func=lambda _: synthesize())
 
     parser_flash = subparsers.add_parser(
             'flash',
             help='Flash device',
-            description='Flash device.')
+            description='Flash the project in the current directory.')
+    parser_flash.set_defaults(func=lambda _: flash())
 
     args = parser.parse_args()
 
