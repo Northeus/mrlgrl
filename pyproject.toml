@@ -1,10 +1,13 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "mrlgrl"
 version = "0.0.1"
 
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+[project.scripts]
+mrlgrl = "mrlgrl.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
