@@ -25,3 +25,10 @@ export MODELSIM_ROOTDIR=~/intelFPGA_lite/20.1/modelsim_ase
 
 export PATH=$QUARTUS_ROOTDIR/bin:$MODELSIM_ROOTDIR/bin:$PATH
 ```
+
+## Versions
+ - 0.0.1:
+   * Prototype for testing.
+ - 0.0.2:
+   * Fixed adding recursive modules for testbenches.
+   * Fixed regex to find testbench modules.

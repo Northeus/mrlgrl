@@ -22,7 +22,8 @@ def list_testbenches() -> list[str]:
 def used_modules(file: Path) -> set[str]:
     modules = set()
     regex = re.compile(
-            r'^\s*((?!module|reg|wire)\S+)\s+((?!module|reg|wire)\S+)\s*\(')
+            r'^\s*((?!module|reg|wire)[a-zA-Z0-9\_]+)'
+            r'\s+((?!module|reg|wire)[a-zA-Z0-9\_]+)\s*\(')
 
     with file.open() as f:
         for line in f:
@@ -55,10 +56,13 @@ def find_dependencies(testbench_filename: str) -> Optional[list[str]]:
         module_file = find_module_file(module)
 
         if module_file is None:
-            print('Could not find file with module "{module}" :/')
             return
 
         module_to_file[module] = module_file
+
+        for new_module in used_modules(module_file):
+            if new_module not in module_to_file:
+                queue.append(new_module)
 
     return list(map(str, module_to_file.values()))
 

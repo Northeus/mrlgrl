@@ -109,7 +109,8 @@ def main():
             '-g',
             '--gui',
             dest='module_gui',
-            help='Run testbench module in GUI')
+            help='Run testbench module in GUI and'
+            ' create "run.do" re-compile script')
 
     parser_synthesize = subparsers.add_parser(
             'synthesize',
