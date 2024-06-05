@@ -26,6 +26,35 @@ export MODELSIM_ROOTDIR=~/intelFPGA_lite/20.1/modelsim_ase
 export PATH=$QUARTUS_ROOTDIR/bin:$MODELSIM_ROOTDIR/bin:$PATH
 ```
 
+You have to use all the commands within the folder with the project.
+
+### Project
+To create a new Quartus II project for DE1-SoC boards use `mrlgrl project -n [project name]`.
+
+To add or remove files within the project use:
+ * `mrlgrl project -a [file to add]`
+ * `mrlgrl project -r [file to remove]`
+
+To clean the generated files inside the project call `mrlgrl project -c`.
+
+### Synthesize
+To synthesize the project simply use `mrlgrl synthesize`.
+
+### Flash
+To upload the binary to DE1-SoC device `mrlgrl flash`.
+
+### Testbench
+This tool detects all the testbenches which files starts with '\`timescale'.
+You can list available tesbenches in the project via `mrlgrl testbench -l`.
+
+After that, you can run a given testbench either in CLI or GUI mode:
+ * CLI: `mrlgrl testbench -c [module name]`
+ * GUI: `mrlgrl testbench -g [module name]`
+
+The GUI mode also creates a `run.do` script which re-compile the project and update the waveforms.
+You can run this script within the ModelSim console via `do run.do`. This script is generated
+before the GUI is opened and removed after you close the GUI.
+
 ## Versions
  - 0.0.1:
    * Prototype for testing.
